@@ -16,16 +16,16 @@ export default class List extends Lightning.Component {
       Focus: {
         transitions: {
           scale: {
-            duration: 1.5,
+            duration: 0.5,
             cubicBezier
           },
           alpha: {
-            duration: 1.5,
+            duration: 0.5,
             cubicBezier
           }
         },
         x: -10,
-        y: 150,
+        y: 160,
         colorLeft: 0xffa0a832,
         colorRight: 0xff38bfd1,
         texture: Lightning.Tools.getRoundRect(Item.width + 10, Item.height + 10, 15, 5, 0xcc30538a, false, 0xff00ffff)
@@ -67,6 +67,7 @@ export default class List extends Lightning.Component {
         }
       },
       Focus: {
+        y: 150,
         scale: 1.2,
         alpha: 0.5,
         smooth: {
@@ -122,12 +123,13 @@ export default class List extends Lightning.Component {
     return this.items[this._index];
   }
 
-  _focus() {
-    this.tag('Focus').setSmooth('alpha', 1);
-  }
-
   _unfocus() {
-    this.tag('Focus').setSmooth('alpha', 0);
+    this.tag('Focus').patch({
+      smooth: {
+        alpha: 0,
+        scale: 1
+      }
+    });
   }
 
   _getFocused() {
