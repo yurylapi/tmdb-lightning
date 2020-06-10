@@ -12,6 +12,7 @@ export default class Movie {
     this._video = obj.video;
     this._vote_average = obj.vote_average;
     this._vote_count = obj.vote_count;
+    this._genres = obj.genre_ids.map(id => genres[id]);
   }
 
   get adult() {

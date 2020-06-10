@@ -3,29 +3,77 @@ import Item from '../item';
 
 export default class List extends Lightning.Component {
   static _template() {
+    const cubicBezier = 'cubic-bezier(0.20, 1.00, 0.80, 1.00)';
     return {
       Items: {
         y: 120,
         forceZIndexContext: true,
         boundsMargin: [500, 100, 500, 100],
         transitions: {
-          x: { duration: 0.3, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' }
+          x: { duration: 0.3, cubicBezier }
         }
       },
       Focus: {
-        /**
-         * @ todo: Your goal is to add a focus indicator. Please take a look at the video
-         * and inspect the rectanle frame that's before the focused movie item.
-         * extra: Animate it a bit when the focus changes to the next item
-         */
+        transitions: {
+          scale: {
+            duration: 1.5,
+            cubicBezier
+          },
+          alpha: {
+            duration: 1.5,
+            cubicBezier
+          }
+        },
+        x: -10,
+        y: 150,
+        colorLeft: 0xffa0a832,
+        colorRight: 0xff38bfd1,
+        texture: Lightning.Tools.getRoundRect(Item.width + 10, Item.height + 10, 15, 5, 0xcc30538a, false, 0xff00ffff)
       },
       Metadata: {
-        /**
-         * @todo: Your goal is to add a component that have multiple text labels,
-         * 1 for the Title of the selected asset and 1 for the genre.
-         */
+        Title: {
+          y: 10,
+          text: {
+            textColor: 0xccffffff,
+            text: '',
+            fontFace: 'SourceSansPro-Black',
+            fontSize: 40
+          }
+        },
+        Genre: {
+          y: 60,
+          text: {
+            text: '',
+            fontFace: 'SourceSansPro-Regular',
+            fontSize: 26
+          }
+        }
       }
     };
+  }
+
+  $focusItem(item) {
+    this.patch({
+      Metadata: {
+        Title: {
+          text: {
+            text: item.title
+          }
+        },
+        Genre: {
+          text: {
+            text: item.genres.join(' | ')
+          }
+        }
+      },
+      Focus: {
+        scale: 1.2,
+        alpha: 0.5,
+        smooth: {
+          alpha: 1
+        }
+      }
+    });
   }
 
   _init() {
@@ -45,25 +93,11 @@ export default class List extends Lightning.Component {
     }
   }
 
-  setIndex(index) {
-    const prevIndex = this._index;
-    this._index = index;
-    const visibleItemsOnScreen = this._getVisibleItemsOnScreen();
-    if (index > prevIndex) {
-      if (this._indexCount < visibleItemsOnScreen) {
-        this._indexCount++;
-      }
-      if (this._indexCount === visibleItemsOnScreen) {
-        this.tag('Items').setSmooth('x', (index - this._indexCount) * -1 * (Item.width + Item.offset));
-      }
-    } else if (index < prevIndex) {
-      if (this._indexCount > 0) {
-        this._indexCount--;
-      }
-      if (this._indexCount === 0) {
-        this.tag('Items').setSmooth('x', index * -1 * (Item.width + Item.offset));
-      }
-    }
+  setIndex(idx) {
+    this._index = idx;
+
+    // update position
+    this.tag('Items').setSmooth('x', idx * -220);
   }
 
   set label(title) {
@@ -88,11 +122,15 @@ export default class List extends Lightning.Component {
     return this.items[this._index];
   }
 
-  _getFocused() {
-    return this.activeItem;
+  _focus() {
+    this.tag('Focus').setSmooth('alpha', 1);
   }
 
-  _getVisibleItemsOnScreen() {
-    return Math.floor(1600 / (Item.width + Item.offset));
+  _unfocus() {
+    this.tag('Focus').setSmooth('alpha', 0);
+  }
+
+  _getFocused() {
+    return this.activeItem;
   }
 }

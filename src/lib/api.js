@@ -9,11 +9,13 @@ export const init = stageInstance => {
 
 export const getMovies = async () => {
   const movies = await get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`);
+  const genres = await get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`);
+  const genreMap = getGenreMap(genres);
   const { results = [] } = movies;
 
   if (results.length) {
     return results.map(data => {
-      return new Movie(data);
+      return new Movie(data, genreMap);
     });
   }
 
@@ -22,15 +24,26 @@ export const getMovies = async () => {
 
 export const getTvShows = async () => {
   const movies = await get(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}`);
+  const genres = await get(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}`);
+  const genreMap = getGenreMap(genres);
   const { results = [] } = movies;
 
   if (results.length) {
     return results.map(data => {
-      return new TvShow(data);
+      return new TvShow(data, genreMap);
     });
   }
 
   return [];
+};
+
+const getGenreMap = result => {
+  const genreMap = {};
+  result.genres.forEach(({ id, name }) => {
+    genreMap[id] = name;
+  });
+
+  return genreMap;
 };
 
 const get = async url => {

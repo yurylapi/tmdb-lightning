@@ -57,13 +57,6 @@ export default class Splash extends Lightning.Component {
       repeat: -1,
       actions: [{ t: 'Spinner', p: 'rotation', sm: 0, v: { sm: 0, 0: 0, 1: Math.PI * 2 } }]
     });
-
-    /**
-     * @todo:
-     * Add _handleEnter(){}
-     * and on enter call Router.navigate("movies")
-     * to navigate to the correct route.
-     */
   }
 
   _handleEnter() {
