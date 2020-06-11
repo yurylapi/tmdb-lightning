@@ -1,4 +1,4 @@
-export default class Movie {
+export default class Asset {
   constructor(obj, genres) {
     this._adult = obj.adult;
     this._backdrop_path = obj.backdrop_path;
@@ -7,12 +7,11 @@ export default class Movie {
     this._overview = obj.overview;
     this._popularity = obj.popularity;
     this._poster_path = obj.poster_path;
-    this._release_date = obj.release_date;
-    this._title = obj.title;
+    this._release_date = obj.release_date || obj.first_air_date;
+    this._title = obj.title || obj.name;
     this._video = obj.video;
     this._vote_average = obj.vote_average;
     this._vote_count = obj.vote_count;
-    this._genres = obj.genre_ids.map(id => genres[id]);
   }
 
   get adult() {
@@ -59,8 +58,16 @@ export default class Movie {
     return this._type;
   }
 
+  set type(v) {
+    this._type = v;
+  }
+
   get video() {
     return this._video;
+  }
+
+  get stream() {
+    return 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4';
   }
 
   get voteAverage() {

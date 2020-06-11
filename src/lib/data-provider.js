@@ -1,5 +1,5 @@
 import { Router } from 'wpe-lightning-sdk';
-import { getMovies, getTvShows } from './api';
+import { getPopular, getDetails } from './api';
 
 /**
  *  bind a data request to a specific route, before a page load
@@ -14,23 +14,27 @@ export default () => {
     // this will always be called
   });
 
-  /**
-   * @todo: inside this data-provider for the movies route
-   * you must await for the getMovies() and invoke the data on the page
-   */
   Router.before(
-    'movies',
+    'home/browse/movies',
     async ({ page }) => {
-      page.data = await getMovies();
+      page.data = await getPopular('movie');
     },
     10 * 60 /* expires */
   );
 
   Router.before(
-    'series',
+    'home/browse/series',
     async ({ page }) => {
-      page.data = await getTvShows();
+      page.data = await getPopular('tv');
     },
     10 * 60 /* expires */
   );
+
+  Router.before('details/:itemType/:itemId', async ({ page, itemType, itemId }) => {
+    page.details = await getDetails(itemType, itemId);
+  });
+
+  Router.before('details/:itemType/:itemId/play', async ({ page, itemType, itemId }) => {
+    page.item = await getDetails(itemType, itemId);
+  });
 };

@@ -47,6 +47,6 @@ export default class Main extends Lightning.Component {
   }
 
   _handleUp() {
-    Router.focusWidget('Menu');
+    Router.focusWidget('menu');
   }
 }

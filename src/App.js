@@ -4,6 +4,7 @@ import routes from './lib/routes';
 import widgets from './lib/widgets';
 import { init as initApi } from './lib/Api';
 import { Logo, Menu } from './widgets';
+import Background from './Background';
 
 export default class App extends Lightning.Component {
   static getFonts() {
@@ -29,6 +30,9 @@ export default class App extends Lightning.Component {
 
   static _template() {
     return {
+      Background: {
+        type: Background
+      },
       Pages: {
         forceZIndexContext: true
       },

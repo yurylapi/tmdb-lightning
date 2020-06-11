@@ -1,5 +1,4 @@
-import { Movie, TvShow } from './models';
-
+import { Asset, Detail } from './models';
 const apiKey = '66683917a94e703e14ca150023f4ea7c';
 let stage;
 
@@ -7,48 +6,35 @@ export const init = stageInstance => {
   stage = stageInstance;
 };
 
-export const getMovies = async () => {
-  const movies = await get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`);
-  const genres = await get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`);
-  const genreMap = getGenreMap(genres);
-  const { results = [] } = movies;
+export const getPopular = async type => {
+  if (!type) {
+    throw new Error('no type defined');
+  }
+
+  const assets = await get(`https://api.themoviedb.org/3/${type}/popular?api_key=${apiKey}`);
+  const { results = [] } = assets;
 
   if (results.length) {
     return results.map(data => {
-      return new Movie(data, genreMap);
+      const asset = new Asset(data);
+      asset.type = type;
+
+      return asset;
     });
   }
-
   return [];
 };
 
-export const getTvShows = async () => {
-  const movies = await get(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}`);
-  const genres = await get(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}`);
-  const genreMap = getGenreMap(genres);
-  const { results = [] } = movies;
-
-  if (results.length) {
-    return results.map(data => {
-      return new TvShow(data, genreMap);
-    });
-  }
-
-  return [];
-};
-
-const getGenreMap = result => {
-  const genreMap = {};
-  result.genres.forEach(({ id, name }) => {
-    genreMap[id] = name;
+export const getDetails = (type, id) => {
+  return get(`https://api.themoviedb.org/3/${type}/${id}?api_key=${apiKey}`).then(response => {
+    return new Detail(response);
   });
-
-  return genreMap;
 };
 
-const get = async url => {
-  const stream = await fetch(url, {
+const get = url => {
+  return fetch(url, {
     Accept: 'application/json'
+  }).then(response => {
+    return response.json();
   });
-  return await stream.json();
 };
