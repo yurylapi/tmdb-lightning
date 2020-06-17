@@ -1,2 +1,2 @@
-export { default as Asset } from './Asset';
-export { default as Detail } from './Detail';
+export { default as Asset } from './asset';
+export { default as Detail } from './detail';

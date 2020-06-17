@@ -108,3 +108,8 @@ dist
 
 dist
 dist/*
+
+dist
+releases
+.tmp
+build

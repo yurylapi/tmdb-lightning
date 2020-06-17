@@ -1,4 +1,23 @@
 export default class Asset {
+  /**
+   * @param {{
+   *  adult: Boolean,
+   *  backdrop_path: String,
+   *  id: Number
+   *  original_language: String
+   *  overview: String
+   *  popularity: Number
+   *  poster_path: String
+   *  release_date: String
+   *  first_air_date: String
+   *  title: String
+   *  name: String
+   *  video: Boolean|String
+   *  vote_average: Number
+   *  vote_count: Number
+   * }} obj
+   * @param {Array} genres
+   */
   constructor(obj, genres) {
     this._adult = obj.adult;
     this._backdrop_path = obj.backdrop_path;

@@ -1,10 +1,7 @@
 import { Lightning, Utils, Router } from 'wpe-lightning-sdk';
-import provider from './lib/data-provider';
-import routes from './lib/routes';
-import widgets from './lib/widgets';
-import { init as initApi } from './lib/Api';
-import { Logo, Menu } from './widgets';
-import Background from './Background';
+import { provider, routes, widgets, init as initApi } from '@/lib';
+import { Logo, Menu } from '@/widgets';
+import { Background } from '@/components';
 
 export default class App extends Lightning.Component {
   static getFonts() {
@@ -15,8 +12,6 @@ export default class App extends Lightning.Component {
     ];
   }
 
-  // when App instance is initialized we call the routes
-  // this will setup all pages and attach them to there route
   _setup() {
     initApi(this.stage);
 
@@ -71,25 +66,17 @@ export default class App extends Lightning.Component {
       },
       class Widgets extends this {
         $enter(args, widget) {
-          // store widget reference
           this._widget = widget;
-
-          // since it's possible that this behaviour
-          // is non-remote driven we force a recalculation
-          // of the focuspath
           this._refocus();
         }
 
         _getFocused() {
-          // we delegate focus to selected widget
-          // so it can consume remotecontrol presses
           return this._widget;
         }
       }
     ];
   }
 
-  // tell page router where to store the pages
   get pages() {
     return this.tag('Pages');
   }

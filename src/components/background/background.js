@@ -1,13 +1,14 @@
 import { Img, Lightning } from 'wpe-lightning-sdk';
-import { getImgUrl } from './lib/tools';
+import { getImgUrl } from '@/lib/tools';
+import { colors } from '@/constants';
 
 export default class Background extends Lightning.Component {
   static _template() {
     const settings = { duration: 2, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' };
     return {
       Background: {
-        colorTop: 0xff717171,
-        colorBottom: 0xff000000,
+        colorTop: colors.grey,
+        colorBottom: colors.black,
         scale: 1.2,
         alpha: 0,
         zIndex: 0,

@@ -1,74 +1,83 @@
-import {Lightning} from "wpe-lightning-sdk"
+import { Lightning } from 'wpe-lightning-sdk';
 
 export default class CircleProgressShader extends Lightning.shaders.WebGLDefaultShader {
+  constructor(ctx) {
+    super(ctx);
+    this._radius = 100;
+    this._width = 50;
+    this._period = 1;
+    this._angle = 0.5;
+    this._smooth = 0.005;
+    this._color = 0xffffffff;
+    this._backgroundColor = 0xff000000;
+    this._time = Date.now();
+  }
 
-    constructor(ctx) {
-        super(ctx);
-        this._radius = 100;
-        this._width = 50;
-        this._period = 1;
-        this._angle = 0.5;
-        this._smooth = 0.005;
-        this._color = 0xffffffff;
-        this._backgroundColor = 0xff000000;
-        this._time = Date.now();
-    }
+  set radius(v) {
+    this._radius = v;
+    this.redraw();
+  }
 
-    set radius(v) {
-        this._radius = v;
-        this.redraw();
-    }
+  set width(v) {
+    this._width = v;
+    this.redraw();
+  }
 
-    set width(v) {
-        this._width = v;
-        this.redraw();
-    }
+  set period(v) {
+    this._period = v;
+    this.redraw();
+  }
 
-    set period(v) {
-        this._period = v;
-        this.redraw();
-    }
+  set angle(v) {
+    this._angle = v;
+    this.redraw();
+  }
 
-    set angle(v) {
-        this._angle = v
-        this.redraw();
-    }
+  set smooth(v) {
+    this._smooth = v;
+    this.redraw();
+  }
 
-    set smooth(v) {
-        this._smooth = v;
-        this.redraw();
-    }
+  set color(v) {
+    this._color = v;
+    this.redraw();
+  }
 
-    set color(v) {
-        this._color = v;
-        this.redraw();
-    }
+  set backgroundColor(v) {
+    this._backgroundColor = v;
+    this.redraw();
+  }
 
-    set backgroundColor(v) {
-        this._backgroundColor = v;
-        this.redraw();
-    }
+  setupUniforms(operation) {
+    super.setupUniforms(operation);
+    const owner = operation.shaderOwner;
 
-    setupUniforms(operation) {
-        super.setupUniforms(operation);
-        const owner = operation.shaderOwner
+    const renderPrecision = this.ctx.stage.getRenderPrecision();
+    this._setUniform('radius', this._radius, this.gl.uniform1f);
+    this._setUniform('width', this._width, this.gl.uniform1f);
+    this._setUniform('period', this._period, this.gl.uniform1f);
+    this._setUniform('angle', this._angle, this.gl.uniform1f);
+    this._setUniform('smooth', this._smooth, this.gl.uniform1f);
+    this._setUniform(
+      'color',
+      new Float32Array(Lightning.StageUtils.getRgbaComponentsNormalized(this._color)),
+      this.gl.uniform4fv
+    );
+    this._setUniform(
+      'backgroundColor',
+      new Float32Array(Lightning.StageUtils.getRgbaComponentsNormalized(this._backgroundColor)),
+      this.gl.uniform4fv
+    );
 
-        const renderPrecision = this.ctx.stage.getRenderPrecision();
-        this._setUniform('radius', this._radius, this.gl.uniform1f);
-        this._setUniform('width', this._width, this.gl.uniform1f);
-        this._setUniform('period', this._period, this.gl.uniform1f);
-        this._setUniform('angle', this._angle, this.gl.uniform1f);
-        this._setUniform('smooth', this._smooth, this.gl.uniform1f);
-        this._setUniform('color', new Float32Array(lng.StageUtils.getRgbaComponentsNormalized(this._color)), this.gl.uniform4fv)
-        this._setUniform('backgroundColor', new Float32Array(lng.StageUtils.getRgbaComponentsNormalized(this._backgroundColor)), this.gl.uniform4fv)
+    this._setUniform(
+      'resolution',
+      new Float32Array([owner._w * renderPrecision, owner._h * renderPrecision]),
+      this.gl.uniform2fv
+    );
 
-        this._setUniform('resolution', new Float32Array([owner._w * renderPrecision, owner._h * renderPrecision]), this.gl.uniform2fv)
-
-        this.redraw()
-    }
-
+    this.redraw();
+  }
 }
-
 
 CircleProgressShader.fragmentShaderSource = `
 
@@ -106,7 +115,7 @@ CircleProgressShader.fragmentShaderSource = `
         pos = transpose_pos(pos);
         float a = atan(pos.y - 0.5, pos.x - 0.5);
         a = (1.0+a/3.14159)/2.0;
-        
+
         return a;
     }
 
@@ -119,7 +128,7 @@ CircleProgressShader.fragmentShaderSource = `
     {
         vec2 fragCoord = vTextureCoord;
         vec4 fragColor = vColor;
-        
+
         vec2 st = vTextureCoord;
         float pct = dist(st, vec2(0.5));
 

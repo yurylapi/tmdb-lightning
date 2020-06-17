@@ -1,5 +1,5 @@
 import { Lightning, Router } from 'wpe-lightning-sdk';
-import { List } from '../components';
+import { List } from '@/components';
 
 export default class Main extends Lightning.Component {
   static _template() {

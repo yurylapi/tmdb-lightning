@@ -1,6 +1,6 @@
 import { Img, Lightning, Router } from 'wpe-lightning-sdk';
-import { getImgUrl } from '../lib/tools';
-import { Button } from '../components';
+import { getImgUrl } from '@/lib/tools';
+import { Button } from '@/components';
 
 export default class Details extends Lightning.Component {
   static _template() {
