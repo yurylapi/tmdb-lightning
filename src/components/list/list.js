@@ -20,7 +20,7 @@ export default class List extends Lightning.Component {
         y: 102,
         colorLeft: colorMap.lightShadeGreen,
         colorRight: colorMap.darkOrange,
-        texture: Lightning.Tools.getRoundRect(236, 344, 16, 6, colorMap.white, true, colorMap.white)
+        texture: Lightning.Tools.getRoundRect(236, 344, 16, 6, colorMap.white, true, colorMap.invisibleWhite)
       },
       Metadata: {
         x: -32,

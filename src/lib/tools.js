@@ -25,6 +25,7 @@ export const colorMap = {
   lightShadeGreen: 0xff8ecea2,
   darkShadeBrown: 0xff615f5d,
   invisibleBlack: 0x00000000,
+  invisibleWhite: 0x00ffffff,
   hiddenWhite: 0x20ffffff,
   blurWhite: 0xaaffffff
 };
