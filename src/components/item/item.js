@@ -50,7 +50,7 @@ export default class Item extends Lightning.Component {
           transitions: {
             y: { duration: 0.6, settings }
           },
-          texture: Lightning.Tools.getRoundRect(70, 70, 35, 0, colorMap.white, true, colorMap.scooter),
+          texture: Lightning.Tools.getRoundRect(70, 70, 35, 0, colorMap.invisibleWhite, true, colorMap.scooter),
           RatingNumber: {
             mount: 0.5,
             x: w => w / 2 + 4,
@@ -66,7 +66,7 @@ export default class Item extends Lightning.Component {
           },
           RatingCircle: {
             rect: true,
-            color: colorMap.white,
+            color: colorMap.invisibleWhite,
             rtt: true,
             mount: 0.5,
             x: 36,
