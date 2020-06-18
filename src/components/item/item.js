@@ -1,9 +1,18 @@
 import { Img, Lightning } from 'wpe-lightning-sdk';
 import { CircleProgressShader } from '@/shader';
-import { getImgUrl } from '@/lib';
+import { assetSettings, colorMap, getImgUrl } from '@/lib';
+import {
+  IMAGE_TAG,
+  NUMBER_TAG,
+  RATING_CIRCLE_TAG,
+  RATING_TAG,
+  SOURCE_SANS_PRO_BOLD,
+  SOURCE_SANS_PRO_REGULAR
+} from '@/constants';
 
 export default class Item extends Lightning.Component {
   static _template() {
+    const settings = { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' };
     return {
       w: Item.width,
       h: Item.height,
@@ -15,23 +24,23 @@ export default class Item extends Lightning.Component {
         rtt: true,
         shader: { type: Lightning.shaders.RoundedRectangle, radius: 10 },
         transitions: {
-          w: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' },
-          h: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' }
+          w: { duration: 0.6, settings },
+          h: { duration: 0.6, settings }
         },
         Image: {
           w: w => w,
           h: h => h,
           scale: 1.2,
           transitions: {
-            w: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' },
-            h: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' }
+            w: { duration: 0.6, settings },
+            h: { duration: 0.6, settings }
           }
         },
         BorderLeft: {
           w: 2,
           h: h => h,
           rect: true,
-          color: 0x40ffffff
+          color: colorMap.fadedWhite
         },
         Rating: {
           mountX: 0.5,
@@ -39,25 +48,25 @@ export default class Item extends Lightning.Component {
           x: w => w / 2,
           y: 360,
           transitions: {
-            y: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' }
+            y: { duration: 0.6, settings }
           },
-          texture: Lightning.Tools.getRoundRect(70, 70, 35, 0, 0x00ffffff, true, 0xff081c22),
+          texture: Lightning.Tools.getRoundRect(70, 70, 35, 0, colorMap.white, true, colorMap.scooter),
           RatingNumber: {
             mount: 0.5,
             x: w => w / 2 + 4,
             y: h => h / 2 + 2,
             flex: {},
             Number: {
-              text: { text: '0', fontSize: 26, fontFace: 'SourceSansPro-Bold' }
+              text: { text: '0', fontSize: 26, fontFace: SOURCE_SANS_PRO_BOLD }
             },
             Percentage: {
               flexItem: { marginTop: 6 },
-              text: { text: '%', fontSize: 12, fontFace: 'SourceSansPro-Regular' }
+              text: { text: '%', fontSize: 12, fontFace: SOURCE_SANS_PRO_REGULAR }
             }
           },
           RatingCircle: {
             rect: true,
-            color: 0x00ffffff,
+            color: colorMap.white,
             rtt: true,
             mount: 0.5,
             x: 36,
@@ -71,8 +80,8 @@ export default class Item extends Lightning.Component {
               width: 3,
               angle: 0.0001,
               smooth: 0.005,
-              color: 0xffd1215c,
-              backgroundColor: 0xff204529
+              color: colorMap.maroonFlush,
+              backgroundColor: colorMap.darkShadeGreen
             }
           }
         }
@@ -84,31 +93,32 @@ export default class Item extends Lightning.Component {
     this._angle = 0.001;
     this._ratingNumber = 0;
 
-    this._focusAnimation = this.tag('Rating').animation({
+    this._focusAnimation = this.tag(RATING_TAG).animation({
       duration: 1.2,
       stopDuration: 0.2,
       stopMethod: 'immediate',
       actions: [
         {
-          t: 'RatingCircle',
+          t: RATING_CIRCLE_TAG,
           p: 'shader.angle',
           rv: 0.0001,
           v: () => {
+            const ratingCircleTag = this.tag(RATING_CIRCLE_TAG);
             if (this._angle < this._item.voteAverage / 10) {
               this._angle += 0.01;
             }
             if (this._angle < 0.4) {
-              this.tag('RatingCircle').shader.color = 0xffd1215c;
+              ratingCircleTag.shader.color = colorMap.maroonFlush;
             } else if (this._angle > 0.4 && this._angle < 0.6) {
-              this.tag('RatingCircle').shader.color = 0xffd2d531;
+              ratingCircleTag.shader.color = colorMap.wattle;
             } else if (this._angle > 0.6) {
-              this.tag('RatingCircle').shader.color = 0xff21d07a;
+              ratingCircleTag.shader.color = colorMap.greenCyan;
             }
             return this._angle;
           }
         },
         {
-          t: 'Number',
+          t: NUMBER_TAG,
           p: 'text.text',
           rv: 0,
           v: () => {
@@ -144,7 +154,7 @@ export default class Item extends Lightning.Component {
     this._index = v;
 
     if (this._index < 8) {
-      this.tag('Image').color = 0xffffffff;
+      this.tag(IMAGE_TAG).color = colorMap.white;
     }
   }
 
@@ -185,14 +195,14 @@ export default class Item extends Lightning.Component {
   }
 
   static get width() {
-    return 180;
+    return assetSettings.width;
   }
 
   static get height() {
-    return 270;
+    return assetSettings.height;
   }
 
   static get offset() {
-    return 40;
+    return assetSettings.offset;
   }
 }

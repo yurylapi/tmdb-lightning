@@ -1,4 +1,5 @@
 import { Lightning } from 'wpe-lightning-sdk';
+import { colorMap } from '@/lib';
 
 export default class NotFound extends Lightning.Component {
   static _template() {
@@ -6,7 +7,7 @@ export default class NotFound extends Lightning.Component {
       rect: true,
       w: 1920,
       h: 1080,
-      color: 0xff615f5d,
+      color: colorMap.darkShadeBrown,
       Label: {
         x: 960,
         y: 540,

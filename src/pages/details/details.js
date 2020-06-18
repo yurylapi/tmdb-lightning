@@ -1,6 +1,7 @@
 import { Img, Lightning, Router } from 'wpe-lightning-sdk';
 import { getImgUrl } from '@/lib/tools';
 import { Button } from '@/components';
+import { BUTTON_TAG, DETAILS_TAG, MENU_WIDGET, SOURCE_SANS_PRO_BOLD, SOURCE_SANS_PRO_REGULAR } from '@/constants';
 
 export default class Details extends Lightning.Component {
   static _template() {
@@ -27,14 +28,14 @@ export default class Details extends Lightning.Component {
             x: { duration: 1, timingFunction: 'cubic-bezier(0.20, 1.00, 0.80, 1.00)' }
           },
           Year: {
-            text: { fontSize: 32, fontFace: 'SourceSansPro-Regular' }
+            text: { fontSize: 32, fontFace: SOURCE_SANS_PRO_REGULAR }
           },
           Title: {
-            text: { fontSize: 64, fontFace: 'SourceSansPro-Bold', wordWrapWidth: 600, maxLines: 2, lineHeight: 74 }
+            text: { fontSize: 64, fontFace: SOURCE_SANS_PRO_BOLD, wordWrapWidth: 600, maxLines: 2, lineHeight: 74 }
           },
           Overview: {
             color: 0xff7b7b7b,
-            text: { fontSize: 24, fontFace: 'SourceSansPro-Regular', wordWrapWidth: 960, lineHeight: 38 }
+            text: { fontSize: 24, fontFace: SOURCE_SANS_PRO_REGULAR, wordWrapWidth: 960, lineHeight: 38 }
           },
           Button: {
             flexItem: { marginTop: 30 },
@@ -61,7 +62,7 @@ export default class Details extends Lightning.Component {
   }
 
   _inactive() {
-    this.tag('Details').setSmooth('x', 90);
+    this.tag(DETAILS_TAG).setSmooth('x', 90);
   }
 
   set itemType(v) {
@@ -99,7 +100,7 @@ export default class Details extends Lightning.Component {
   }
 
   _handleUp() {
-    Router.focusWidget('menu');
+    Router.focusWidget(MENU_WIDGET);
   }
 
   _handleEnter() {
@@ -107,6 +108,6 @@ export default class Details extends Lightning.Component {
   }
 
   _getFocused() {
-    return this.tag('Button');
+    return this.tag(BUTTON_TAG);
   }
 }

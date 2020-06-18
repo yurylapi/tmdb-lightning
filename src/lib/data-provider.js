@@ -1,5 +1,6 @@
 import { Router } from 'wpe-lightning-sdk';
 import { getDetails, getPopular } from '@/lib/api';
+import { ROUTE_DETAILS, ROUTE_MOVIES, ROUTE_PLAY, ROUTE_SERIES } from '@/constants';
 
 /**
  *  Binds a data request to a specific route, before a page load
@@ -16,7 +17,7 @@ export default () => {
    * Awaits the request data of popular movies before navigate to route.
    */
   Router.before(
-    'home/browse/movies',
+    ROUTE_MOVIES,
     async ({ page }) => {
       page.data = await getPopular('movie');
     },
@@ -27,7 +28,7 @@ export default () => {
    * Awaits the request data of popular tv shows before navigate to route.
    */
   Router.before(
-    'home/browse/series',
+    ROUTE_SERIES,
     async ({ page }) => {
       page.data = await getPopular('tv');
     },
@@ -37,14 +38,14 @@ export default () => {
   /**
    * Awaits the request data of specific item before navigate to route.
    */
-  Router.before('details/:itemType/:itemId', async ({ page, itemType, itemId }) => {
+  Router.before(ROUTE_DETAILS, async ({ page, itemType, itemId }) => {
     page.details = await getDetails(itemType, itemId);
   });
 
   /**
    * Awaits the request data of playing video before navigate to route.
    */
-  Router.before('details/:itemType/:itemId/play', async ({ page, itemType, itemId }) => {
+  Router.before(ROUTE_PLAY, async ({ page, itemType, itemId }) => {
     page.item = await getDetails(itemType, itemId);
   });
 };

@@ -1,10 +1,11 @@
 import { Lightning } from 'wpe-lightning-sdk';
+import { SOURCE_SANS_PRO_REGULAR } from '@/constants';
 
 export default class MenuItem extends Lightning.Component {
   static _template() {
     return {
       flexItem: { marginRight: 40 },
-      text: { text: '', fontSize: 48, fontFace: 'SourceSansPro-Regular' }
+      text: { text: '', fontSize: 48, fontFace: SOURCE_SANS_PRO_REGULAR }
     };
   }
 

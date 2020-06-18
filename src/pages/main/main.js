@@ -1,5 +1,6 @@
 import { Lightning, Router } from 'wpe-lightning-sdk';
 import { List } from '@/components';
+import { LIST_TAG, MENU_WIDGET } from '@/constants';
 
 export default class Main extends Lightning.Component {
   static _template() {
@@ -18,12 +19,13 @@ export default class Main extends Lightning.Component {
   }
 
   set data(v) {
-    this.tag('List').movies = v;
+    this.tag(LIST_TAG).movies = v;
   }
 
   set movies(movies) {
-    this.tag('Lists').label = 'Popular';
-    this.tag('Lists').movies = movies.results;
+    const listTag = this.tag(LIST_TAG);
+    listTag.label = 'Popular';
+    listTag.movies = movies.results;
   }
 
   _focus() {
@@ -43,10 +45,10 @@ export default class Main extends Lightning.Component {
   }
 
   _getFocused() {
-    return this.tag('List');
+    return this.tag(LIST_TAG);
   }
 
   _handleUp() {
-    Router.focusWidget('menu');
+    Router.focusWidget(MENU_WIDGET);
   }
 }

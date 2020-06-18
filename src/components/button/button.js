@@ -1,7 +1,10 @@
 import { Lightning } from 'wpe-lightning-sdk';
+import { colorMap } from '@/lib';
+import { LABEL_TAG, SOURCE_SANS_PRO_REGULAR } from '@/constants';
 
 export default class Button extends Lightning.Component {
   static _template() {
+    const settings = { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.30, 1.00)' };
     return {
       flex: {},
       Background: {
@@ -9,17 +12,17 @@ export default class Button extends Lightning.Component {
         rtt: true,
         shader: { type: Lightning.shaders.RoundedRectangle, radius: 14 },
         rect: true,
-        color: 0xff404249,
+        color: colorMap.blueZodiac,
         transitions: {
-          color: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.30, 1.00)' },
-          scale: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.30, 1.00)' }
+          color: settings,
+          scale: settings
         },
         Label: {
           flexItem: { marginLeft: 80, marginRight: 80, marginTop: 15, marginBottom: 10 },
-          text: { fontFace: 'SourceSansPro-Regular', fontSize: 32 },
+          text: { fontFace: SOURCE_SANS_PRO_REGULAR, fontSize: 32 },
           transitions: {
-            color: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.30, 1.00)' },
-            scale: { duration: 0.6, timingFunction: 'cubic-bezier(0.20, 1.00, 0.30, 1.00)' }
+            color: { duration: 0.6, settings },
+            scale: { duration: 0.6, settings }
           }
         }
       }
@@ -29,7 +32,7 @@ export default class Button extends Lightning.Component {
   set label(v) {
     this._label = v;
 
-    this.tag('Label').patch({
+    this.tag(LABEL_TAG).patch({
       text: { text: this._label }
     });
   }
@@ -37,9 +40,9 @@ export default class Button extends Lightning.Component {
   _focus() {
     this.patch({
       Background: {
-        smooth: { color: 0xff03b3e4 },
+        smooth: { color: colorMap.darkOrange },
         Label: {
-          smooth: { color: 0xffffffff }
+          smooth: { color: colorMap.white }
         }
       }
     });
@@ -48,9 +51,9 @@ export default class Button extends Lightning.Component {
   _unfocus() {
     this.patch({
       Background: {
-        smooth: { color: 0xff404249 },
+        smooth: { color: colorMap.blueZodiac },
         Label: {
-          smooth: { color: 0xffffffff }
+          smooth: { color: colorMap.white }
         }
       }
     });

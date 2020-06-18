@@ -1,5 +1,7 @@
 import { Lightning, Router } from 'wpe-lightning-sdk';
 import { Item } from '@/components';
+import { ITEMS_TAG, LABEL_TAG, METADATA_TAG, SOURCE_SANS_PRO_BOLD, SOURCE_SANS_PRO_REGULAR } from '@/constants';
+import { colorMap } from '@/lib';
 
 export default class List extends Lightning.Component {
   static _template() {
@@ -16,9 +18,9 @@ export default class List extends Lightning.Component {
         alpha: 0,
         x: -32,
         y: 102,
-        colorLeft: 0xff8ecea2,
-        colorRight: 0xff03b3e4,
-        texture: Lightning.Tools.getRoundRect(236, 344, 16, 6, 0xffffffff, true, 0x00ffffff)
+        colorLeft: colorMap.lightShadeGreen,
+        colorRight: colorMap.darkOrange,
+        texture: Lightning.Tools.getRoundRect(236, 344, 16, 6, colorMap.white, true, colorMap.white)
       },
       Metadata: {
         x: -32,
@@ -26,13 +28,13 @@ export default class List extends Lightning.Component {
         mountY: 1,
         flex: { direction: 'column' },
         Title: {
-          text: { fontSize: 64, fontFace: 'SourceSansPro-Bold', wordWrapWidth: 960, maxLines: 1 }
+          text: { fontSize: 64, fontFace: SOURCE_SANS_PRO_BOLD, wordWrapWidth: 960, maxLines: 1 }
         },
         ReleaseDate: {
           flexItem: { marginTop: -24 },
-          colorLeft: 0xff8ecea2,
-          colorRight: 0xff03b3e4,
-          text: { fontSize: 32, fontFace: 'SourceSansPro-Regular', wordWrapWidth: 960, maxLines: 1 }
+          colorLeft: colorMap.lightShadeGreen,
+          colorRight: colorMap.darkOrange,
+          text: { fontSize: 32, fontFace: SOURCE_SANS_PRO_REGULAR, wordWrapWidth: 960, maxLines: 1 }
         }
       }
     };
@@ -59,8 +61,9 @@ export default class List extends Lightning.Component {
 
   updateMetadata({ item }) {
     // first hide
-    this.tag('Metadata').alpha = 0;
-    this.tag('Metadata').y = 80;
+    const metadataTag = this.tag(METADATA_TAG);
+    metadataTag.alpha = 0;
+    metadataTag.y = 80;
 
     this.patch({
       Metadata: {
@@ -85,16 +88,16 @@ export default class List extends Lightning.Component {
     this._index = idx;
 
     // update position
-    this.tag('Items').setSmooth('x', idx * -220);
+    this.tag(ITEMS_TAG).setSmooth('x', idx * -220);
   }
 
   set label(title) {
-    this.tag('Label').text.text = title;
+    this.tag(LABEL_TAG).text.text = title;
   }
 
   set movies(v) {
     // we add an array of object with type: Item
-    this.tag('Items').children = v.map((movie, index) => {
+    this.tag(ITEMS_TAG).children = v.map((movie, index) => {
       return {
         type: Item,
         item: movie,
@@ -121,7 +124,7 @@ export default class List extends Lightning.Component {
   }
 
   get items() {
-    return this.tag('Items').children;
+    return this.tag(ITEMS_TAG).children;
   }
 
   get activeItem() {
